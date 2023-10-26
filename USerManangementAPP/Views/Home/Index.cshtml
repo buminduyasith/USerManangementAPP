@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model List<StaffMemberDto>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+
+<div class="container">
+    <h2>Invite List</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Invited</th>
+                <th>Active</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Email</td>
+                    <td>@(item.IsInvited ? "Yes" : "No")</td>
+                    <td>@(item.IsActive ? "Active" : "In Active")</td>
+                    <td class="actions">
+                        <a href="javascript:void(0);" class="btn btn-secondary btn-sm invite-button">Invite</a>
+                        <a href="@Url.Action("Edit", "Home", new { email = item.Email })" class="btn btn-secondary btn-sm">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+  <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="inviteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="inviteModalLabel">Invite User</h5>
+        <button type="button" class="modelclose" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Invite user form -->
+        <form id="inviteForm">
+          <div class="form-group">
+            <label for="email">Email Address:</label>
+            <input type="text" class="form-control" id="email" name="email" placeholder="Enter email">
+          </div>
+          <!-- Add other form fields for the invitation here -->
+        </form>
+      </div>
+      <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modelclose" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" id="sendInvite">Send Invite</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+@section Scripts{
+    <script>
+
+          $(document).ready(function () {
+
+              console.log("amme")
+            // Handle "Invite" button click
+            $('.invite-button').click(function () {
+                $('#email').val(''); // Clear the input field
+                $('#inviteModal').modal('show');
+
+            });
+
+            $('.modelclose').click(function () {
+                $('#inviteModal').modal('hide');
+            });
+
+            // Handle "Send Invite" button click
+            $('#sendInvite').click(function () {
+                // Handle the invite logic here, e.g., submit the form via AJAX
+                // You can use an AJAX request to send the invitation and handle the response
+                // After handling the invite, you may want to close the modal using $('#inviteModal').modal('hide');
+            });
+        });
+    </script>
+}
