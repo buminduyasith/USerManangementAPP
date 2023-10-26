@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+	<PackageReference Include="HotChocolate.AspNetCore" Version="13.6.0" />
+	<PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="13.6.0" />
   </ItemGroup>
 
 </Project>
