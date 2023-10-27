@@ -12,6 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
+    .AddType<StudentQuery>()
     .AddMutationType<Mutation>();
 
 var app = builder.Build();
