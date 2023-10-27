@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IGraphQLClient>(s => new GraphQLHttpClient("https://localhost:7204/graphql/", new NewtonsoftJsonSerializer()));
+builder.Services.AddScoped<IGraphQLClient>(s => new GraphQLHttpClient(builder.Configuration["GraphQLServer"], new NewtonsoftJsonSerializer()));
 builder.Services.AddScoped<OwnerConsumer>();
 
 
