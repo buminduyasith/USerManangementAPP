@@ -1,4 +1,4 @@
-﻿namespace LearnGraphQL.Models
+﻿namespace Domain.Models
 {
     public class Course
     {
@@ -6,7 +6,7 @@
 
         public string Name { get; set; }
 
-        [GraphQLName("gpa")]
+      //  [GraphQLName("gpa")]
         public double GPA { get; set; }
     }
 }

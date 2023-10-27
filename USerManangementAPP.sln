@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "USerManangementAPP", "USerM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LearnGraphQL", "LearnGraphQL\LearnGraphQL.csproj", "{81822064-901C-4586-9C76-BE70FA92789A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphQLConsumer", "GraphQLConsumer\GraphQLConsumer.csproj", "{C7771768-4190-4FBF-8DE6-487D73A5586A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{1E04DFC1-A8C4-4D95-BD63-5131F1179DA4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{81822064-901C-4586-9C76-BE70FA92789A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81822064-901C-4586-9C76-BE70FA92789A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81822064-901C-4586-9C76-BE70FA92789A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7771768-4190-4FBF-8DE6-487D73A5586A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7771768-4190-4FBF-8DE6-487D73A5586A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7771768-4190-4FBF-8DE6-487D73A5586A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7771768-4190-4FBF-8DE6-487D73A5586A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E04DFC1-A8C4-4D95-BD63-5131F1179DA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E04DFC1-A8C4-4D95-BD63-5131F1179DA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E04DFC1-A8C4-4D95-BD63-5131F1179DA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E04DFC1-A8C4-4D95-BD63-5131F1179DA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

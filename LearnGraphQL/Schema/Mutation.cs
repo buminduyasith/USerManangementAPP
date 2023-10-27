@@ -1,5 +1,4 @@
-﻿using LearnGraphQL.Models;
-
+﻿using Domain.Models;
 namespace LearnGraphQL.Schema
 {
     public class Mutation

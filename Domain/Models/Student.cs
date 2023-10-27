@@ -1,4 +1,4 @@
-﻿namespace LearnGraphQL.Models
+﻿namespace Domain.Models
 {
     public class Student
     {
