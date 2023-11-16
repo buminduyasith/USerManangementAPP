@@ -39,7 +39,128 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
                .AddEntityFrameworkStores<ApplicationDbContext>()
                .AddDefaultTokenProviders()
                .AddDefaultUI();
+// JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
+builder.Services.AddAuthentication()
+            .AddCookie("xerosignintemp")
+           .AddOpenIdConnect("XeroSignIn", options =>
+           {
+               options.Authority = "https://identity.xero.com";
+               options.SaveTokens = true;
+
+               options.ClientId = builder.Configuration["XeroIdentity:ClientId"];
+               options.ResponseType = "code";
+               options.ResponseMode = "query";
+
+               options.UsePkce = true;
+
+               options.Scope.Clear();
+               options.Scope.Add("openid");
+               options.Scope.Add("profile");
+               options.Scope.Add("email");
+               options.Scope.Add("offline_access");
+
+               options.SignInScheme = "xerosignintemp";
+               // IdentityConstants.ApplicationScheme; IdentityConstants.ExternalScheme;
+
+               options.CallbackPath = "/signin-oidc";
+               /* options.Events = new OpenIdConnectEvents
+                {
+                    OnTokenValidated = OnTokenValidated2(),
+                };*/
+
+           });
+
+static Func<TokenValidatedContext, Task> OnTokenValidated()
+{
+    return async context =>
+    {
+        var services = context.HttpContext.RequestServices;
+        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+        var signInManager = services.GetRequiredService<SignInManager<IdentityUser>>();
+
+        var handler = new JwtSecurityTokenHandler();
+        var accessToken = handler.ReadJwtToken(context.TokenEndpointResponse.AccessToken);
+        var idToken = handler.ReadJwtToken(context.TokenEndpointResponse.IdToken);
+
+        var newUser = new IdentityUser
+        {
+            UserName = idToken.Claims.First(claim => claim.Type == "given_name").Value,
+            Email = idToken.Claims.First(claim => claim.Type == "email").Value,
+        };
+
+        // Add the new user to the database
+        var result = await userManager.CreateAsync(newUser);
+
+        if (result.Succeeded)
+        {
+            await signInManager.SignInAsync(newUser, true);
+            // await context.HttpContext.;
+        }
+
+        // Custom cookie authentication
+        /*   var claims = new List<Claim>()
+       {
+         *//*new Claim("XeroUserId", accessToken.Claims.First(Claim => Claim.Type == "xero_userid").Value),
+         new Claim("SessionId", accessToken.Claims.First(claim => claim.Type == "global_session_id").Value),
+         new Claim("Name", idToken.Claims.First(claim => claim.Type == "name").Value),
+         new Claim("FirstName", idToken.Claims.First(claim => claim.Type == "given_name").Value),
+         new Claim("LastName", idToken.Claims.First(claim => claim.Type == "family_name").Value),
+         new Claim ("Email", idToken.Claims.First(claim => claim.Type == "email").Value),*//*
+         new Claim ("Ammma", "sujatha"),
+       };
+
+       var claimsIdentity = new ClaimsIdentity(
+           claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+       context.Principal.AddIdentity(claimsIdentity);
+
+       await context.HttpContext.SignInAsync(
+          IdentityConstants.ApplicationScheme,
+           new ClaimsPrincipal(claimsIdentity), new AuthenticationProperties()
+           {
+               ExpiresUtc = accessToken.ValidTo,
+           });*/
+        return;
+    };
+}
+
+
+static Func<TokenValidatedContext, Task> OnTokenValidated2()
+{
+    return async context =>
+    {
+
+        var handler = new JwtSecurityTokenHandler();
+        var accessToken = handler.ReadJwtToken(context.TokenEndpointResponse.AccessToken);
+        var idToken = handler.ReadJwtToken(context.TokenEndpointResponse.IdToken);
+        var refreshToken = context.TokenEndpointResponse.RefreshToken;
+        // Custom cookie authentication
+        var claims = new List<Claim>()
+        {
+          new Claim("XeroUserId", accessToken.Claims.First(Claim => Claim.Type == "xero_userid").Value),
+          new Claim("SessionId", accessToken.Claims.First(claim => claim.Type == "global_session_id").Value),
+          new Claim("Name", idToken.Claims.First(claim => claim.Type == "name").Value),
+          new Claim("FirstName", idToken.Claims.First(claim => claim.Type == "given_name").Value),
+          new Claim("LastName", idToken.Claims.First(claim => claim.Type == "family_name").Value),
+          new Claim ("Email", idToken.Claims.First(claim => claim.Type == "email").Value),
+          new Claim ("refreshtoken", refreshToken),
+        };
+
+        var claimsIdentity = new ClaimsIdentity(
+            claims, "xerosignintemp");
+
+        context.Principal.AddIdentity(claimsIdentity);
+
+        await context.HttpContext.SignInAsync(
+           "xerosignintemp",
+            new ClaimsPrincipal(claimsIdentity), new AuthenticationProperties()
+            {
+                ExpiresUtc = accessToken.ValidTo,
+            });
+        return;
+    };
+}
 
 /*builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();*/
