@@ -1,4 +1,5 @@
 using LearnGraphQL.Schema;
+using OpenIddict.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,32 @@ builder.Services
     .AddQueryType<Query>()
     .AddType<StudentQuery>()
     .AddMutationType<Mutation>();
+
+builder.Services.AddOpenIddict()
+
+    // Register the OpenIddict client components.
+    .AddClient(options =>
+    {
+        // Allow grant_type=client_credentials to be negotiated.
+        options.AllowClientCredentialsFlow();
+
+        // Disable token storage, which is not necessary for non-interactive flows like
+        // grant_type=password, grant_type=client_credentials or grant_type=refresh_token.
+        options.DisableTokenStorage();
+
+        options.UseSystemNetHttp();
+
+        // Add a client registration matching the client application definition in the server project.
+        options.AddRegistration(new OpenIddictClientRegistration
+        {
+            Issuer = new Uri("https://localhost:7268/", UriKind.Absolute),
+
+            ClientId = "console",
+            ClientSecret = "388D45FA-B36B-4988-BA59-B187D329C207"
+        });
+    });
+
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
