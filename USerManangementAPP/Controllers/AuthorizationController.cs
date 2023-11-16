@@ -48,6 +48,7 @@
                 // Add the claims that will be persisted in the tokens (use the client_id as the subject identifier).
                 identity.SetClaim(Claims.Subject, await _applicationManager.GetClientIdAsync(application));
                 identity.SetClaim(Claims.Name, await _applicationManager.GetDisplayNameAsync(application));
+                identity.SetClaim("customclaim", "custome-claim-value");
 
                 // Note: In the original OAuth 2.0 specification, the client credentials grant
                 // doesn't return an identity token, which is an OpenID Connect concept.
@@ -77,7 +78,8 @@
             return claim.Type switch
             {
                 Claims.Name or
-                Claims.Subject
+                Claims.Subject or
+                "customclaim" // Assuming "tenantid" is the claim type for tenant identifier
                     => new[] { Destinations.AccessToken, Destinations.IdentityToken },
 
                 _ => new[] { Destinations.AccessToken },
