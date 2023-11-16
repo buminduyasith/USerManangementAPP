@@ -26,6 +26,7 @@
 
             var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
 
+            // if you change permissions once you created this client, you have to manually add those thing to db or you have to add new client or remove the this client in the db
             if (await manager.FindByClientIdAsync("console") == null)
             {
                 await manager.CreateAsync(new OpenIddictApplicationDescriptor
@@ -36,7 +37,9 @@
                     Permissions =
                     {
                         Permissions.Endpoints.Token,
-                        Permissions.GrantTypes.ClientCredentials
+                        Permissions.Endpoints.Introspection,
+                        Permissions.GrantTypes.ClientCredentials,
+                        Permissions.Prefixes.Scope + "api",
                     }
                 });
             }
